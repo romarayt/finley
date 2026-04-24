@@ -1,0 +1,52 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Transaction {
+  id           String   @id @default(cuid())
+  amount       Decimal  @db.Decimal(14, 2)
+  currency     String   @default("RUB")
+  category     String
+  description  String
+  type         TxType   @default(EXPENSE)
+  occurredAt   DateTime
+  createdAt    DateTime @default(now())
+  aiConfidence Float?
+
+  @@index([occurredAt])
+  @@index([category])
+}
+
+model Correction {
+  id            String   @id @default(cuid())
+  transactionId String
+  originalText  String
+  aiCategory    String
+  userCategory  String
+  createdAt     DateTime @default(now())
+}
+
+model Settings {
+  id            Int      @id @default(1)
+  monthlyBudget Decimal  @db.Decimal(14, 2) @default(80000)
+  currency      String   @default("RUB")
+  updatedAt     DateTime @updatedAt
+}
+
+model InsightCache {
+  id        Int      @id @default(1)
+  payload   String
+  txCount   Int
+  createdAt DateTime @default(now())
+}
+
+enum TxType {
+  INCOME
+  EXPENSE
+}
