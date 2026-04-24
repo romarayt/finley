@@ -7,7 +7,7 @@ export const CategorizationResultSchema = z.object({
   category: z.enum(CATEGORIES),
   description: z.string().min(1).max(200),
   type: z.enum(["INCOME", "EXPENSE"]),
-  occurredAt: z.string().datetime().or(z.string().date()).optional(),
+  occurredAt: z.string().datetime().or(z.string().date()).nullish(),
   confidence: z.number().min(0).max(1),
 });
 
