@@ -14,7 +14,7 @@ import type { CategorizationResult } from "@/features/ai/schema";
 import { cn } from "@/lib/utils";
 import { formatMoney, type Currency } from "@/lib/money";
 
-type Preview = CategorizationResult & { occurredAt?: string };
+type Preview = CategorizationResult;
 
 export function QuickAddForm({ onDone }: { onDone?: () => void }) {
   const [text, setText] = useState("");
@@ -83,7 +83,7 @@ export function QuickAddForm({ onDone }: { onDone?: () => void }) {
       category: preview.category,
       description: preview.description,
       type: preview.type,
-      occurredAt: preview.occurredAt ?? new Date().toISOString(),
+      occurredAt: preview.occurredAt ? String(preview.occurredAt) : new Date().toISOString(),
       aiConfidence: preview.confidence,
     };
 
@@ -178,7 +178,7 @@ export function QuickAddForm({ onDone }: { onDone?: () => void }) {
             await Promise.resolve();
             const payload = {
               ...p,
-              occurredAt: p.occurredAt ?? new Date().toISOString(),
+              occurredAt: p.occurredAt ? String(p.occurredAt) : new Date().toISOString(),
               aiConfidence: 1,
             };
             setSaving(true);
